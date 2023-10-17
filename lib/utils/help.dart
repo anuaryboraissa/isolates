@@ -11,7 +11,7 @@ void coordinatorIsolate(SendPort coordinatorSendPort) async {
   // Send messages to the worker isolates
   for (var i = 0; i < 2; i++) {
     final workerSendPort = await workerIsolate(i, receivePort.sendPort);
-    workerSendPort.send('Coordinator: Hello Worker $i');
+    workerSendPort.send(i == 0 ? 10 : 20);
   }
 }
 
@@ -22,8 +22,12 @@ Future<SendPort> workerIsolate(int id, SendPort coordinatorSendPort) async {
   // Listen for messages from the coordinator
   receivePort.listen((message) {
     print('Worker $id received: $message');
+
+    int factorial = factorialData(message);
+
     // Respond to the coordinator
-    coordinatorSendPort.send('Worker $id: Received');
+    coordinatorSendPort
+        .send('Worker $id: Received and get factorial is $factorial');
   });
 
   // Send the worker's sendPort to the coordinator
@@ -39,4 +43,11 @@ void initializeMultiples() async {
   Isolate.spawn(coordinatorIsolate, coordinatorSendPort);
 
   // The coordinatorIsolate will handle communication from here
+}
+
+int factorialData(int n) {
+  if (n == 0) {
+    return 1;
+  }
+  return n * factorialData(n - 1);
 }
