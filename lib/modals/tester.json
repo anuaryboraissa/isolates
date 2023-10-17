@@ -1,0 +1,7 @@
+{
+ 
+        "insertUser": {
+            "success": true,
+            "message": "User inserted successfully!"
+        }
+}
