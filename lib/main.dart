@@ -8,6 +8,9 @@ import 'package:provider/provider.dart';
 import 'stateManagement/async.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Use the messenger for communication with the background isolate.
   await initHiveForFlutter();
   runApp(const DICApplication());
 }
